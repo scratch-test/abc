@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment System</title>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .course-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .course-item {
+            margin-bottom: 10px;
+        }
+        .course-item button {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="page1">
+        <h2>Enter User Details</h2>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your username">
+        </div>
+        <div class="form-group">
+            <label for="registration-id">Registration ID:</label>
+            <input type="text" id="registration-id" placeholder="Enter your registration ID">
+        </div>
+        <button onclick="showCourses()">Next</button>
+    </div>
+
+    <div class="container" id="page2" style="display: none;">
+        <h2>Choose a Course</h2>
+        <ul class="course-list">
+            <li class="course-item" data-course-id="1">
+                Course 1 <button onclick="registerCourse(1)">Register</button>
+            </li>
+            <li class="course-item" data-course-id="2">
+                Course 2 <button onclick="registerCourse(2)">Register</button>
+            </li>
+            <li class="course-item" data-course-id="3">
+                Course 3 <button onclick="registerCourse(3)">Register</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="container" id="page3" style="display: none;">
+        <h2>Course Registration Details</h2>
+        <div id="user-details"></div>
+        <div id="course-details"></div>
+    </div>
+
+    <script>
+        // JavaScript functions
+        let userDetails = {};
+        let selectedCourse = {};
+
+        function showCourses() {
+            const username = document.getElementById('username').value;
+            const registrationId = document.getElementById('registration-id').value;
+            if (username && registrationId) {
+                userDetails = { username, registrationId };
+                document.getElementById('page1').style.display = 'none';
+                document.getElementById('page2').style.display = 'block';
+            } else {
+                alert('Please fill in all fields.');
+            }
+        }
+
+        function registerCourse(courseId) {
+            selectedCourse = { courseId };
+            document.getElementById('page2').style.display = 'none';
+            document.getElementById('page3').style.display = 'block';
+            displayRegistrationDetails();
+        }
+
+        function displayRegistrationDetails() {
+            const userDetailDiv = document.getElementById('user-details');
+            const courseDetailDiv = document.getElementById('course-details');
+
+            userDetailDiv.innerHTML = `<p><strong>Username:</strong> ${userDetails.username}</p>
+                                        <p><strong>Registration ID:</strong> ${userDetails.registrationId}</p>`;
+
+            courseDetailDiv.innerHTML = `<p><strong>Course:</strong> Course ${selectedCourse.courseId}</p>`;
+        }
+    </script>
+</body>
+</html>

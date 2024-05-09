@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 60%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance Management System</h1>
+        <form id="addStudentForm">
+            <input type="text" id="studentName" placeholder="Enter student name">
+            <button type="submit">Add Student</button>
+        </form>
+        <div id="attendanceTable"></div>
+        <button onclick="generateReport()">Generate Report</button>
+    </div>
+    <script>
+        let students = [];
+
+        document.getElementById('addStudentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const studentName = document.getElementById('studentName').value.trim();
+            if (studentName !== '') {
+                students.push({ name: studentName, present: false });
+                renderAttendanceTable();
+                document.getElementById('studentName').value = '';
+            }
+        });
+
+        function toggleAttendance(index) {
+            students[index].present = !students[index].present;
+            renderAttendanceTable();
+        }
+
+        function renderAttendanceTable() {
+            const tableDiv = document.getElementById('attendanceTable');
+            if (students.length === 0) {
+                tableDiv.innerHTML = '<p>No students added yet.</p>';
+                return;
+            }
+            let tableHTML = '<table><tr><th>Student Name</th><th>Attendance</th></tr>';
+            students.forEach((student, index) => {
+                tableHTML += `<tr><td>${student.name}</td><td><input type="checkbox" ${student.present ? 'checked' : ''} onchange="toggleAttendance(${index})"></td></tr>`;
+            });
+            tableHTML += '</table>';
+            tableDiv.innerHTML = tableHTML;
+        }
+
+        function generateReport() {
+            const presentees = students.filter(student => student.present).map(student => student.name);
+            const absentees = students.filter(student => !student.present).map(student => student.name);
+            const reportWindow = window.open('', '_blank');
+            const reportContent = `
+                <html>
+                <head>
+                    <title>Attendance Report</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 20px;
+                        }
+                        .report {
+                            max-width: 600px;
+                            margin: 20px auto;
+                            padding: 20px;
+                            background-color: #fff;
+                            border-radius: 10px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        }
+                        .report h1 {
+                            margin-top: 0;
+                        }
+                        .report ul {
+                            list-style-type: none;
+                            padding: 0;
+                        }
+                        .report ul li {
+                            margin-bottom: 5px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="report">
+                        <h1>Attendance Report</h1>
+                        <h2>Presentees:</h2>
+                        <ul>${presentees.map(presentee => `<li>${presentee}</li>`).join('')}</ul>
+                        <h2>Absentees:</h2>
+                        <ul>${absentees.map(absentee => `<li>${absentee}</li>`).join('')}</ul>
+                    </div>
+                </body>
+                </html>
+            `;
+            reportWindow.document.write(reportContent);
+            reportWindow.document.close();
+        }
+    </script>
+</body>
+</html>
