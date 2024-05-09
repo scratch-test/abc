@@ -1,0 +1,42 @@
+
+<html>
+<head>
+<title>Employee Login</title>
+</head>
+<body style="background-color:#AFEEEF">
+<center>
+  <h2>Employee Login</h2>
+  <form id="loginForm" onsubmit="return validateLogin()">
+    <div>
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" name="loginUsername" required>
+    </div><br>
+    <div>
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" name="loginPassword" required>
+    </div><br>
+    <button type="submit">Login</button>
+  </form>
+  <br><button onclick="window.location.href = 'reg.html'">Register</button>
+
+  <script>
+    function validateLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      if (username === '' || password === '') {
+        alert('Please fill in all fields.');
+        return false;
+      }
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+      for (const user of registeredUsers) {
+        if (user.username === username && user.password === password) {
+          alert('Login Successful!');
+          return true;
+        }
+      }
+      alert('Invalid username or password.');
+      return false;
+    }
+  </script>
+</body>
+</html>

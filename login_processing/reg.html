@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>User Registration</title>
+</head>
+<body style="background-color:#AFEEEF">
+<center>
+  <h2>Employee Registration Form</h2>
+  <form id="registrationForm" onsubmit="return validateRegistration()">
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+    </div><br>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div><br>
+    <div>
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" min="18" required>
+    </div><br>
+    <div>
+      <label for="dob">Date:</label>
+      <input type="date" id="dob" name="dob" required>
+    </div><br>
+    <div>
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" placeholder="Enter 10-digit phone number" required>
+    </div><br>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+    </div><br>
+    <div>
+      <label for="address">Address:</label>
+      <textarea id="address" name="address" required></textarea>
+    </div><br>
+   <label>Gender:</label>
+<div>
+  <input type="radio" id="male" name="gender" value="male" required>
+  <label for="male">Male</label>
+
+  <input type="radio" id="female" name="gender" value="female" required>
+  <label for="female">Female</label>
+</div><br>
+    <button type="submit">Register</button>
+  </form>
+  <button onclick="window.location.href = 'login.html'">Login</button>
+  <script>
+    function validateRegistration() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const gender = document.querySelector('input[name="gender"]:checked');
+      const age = document.getElementById('age').value;
+      if (username === '' || password === '' || phoneNumber === '' || email === '' || address === '' || !gender || age === '') {
+        alert('Please fill in all fields.');
+        return false;
+      }
+      if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        alert('Username must contain only letters and numbers.');
+        return false;
+      }
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long.');
+        return false;
+      }
+      if (!/^\d{10}$/.test(phoneNumber)) {
+        alert('Please enter a valid 10-digit phone number.');
+        return false;
+      }
+      if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return false;
+      }
+      const user = {
+        username: username,
+        password: password,
+        age: age,
+        phoneNumber: phoneNumber,
+        email: email,
+        address: address,
+        gender: gender.value
+      };
+      const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+      registeredUsers.push(user);
+      localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+      alert('Registration successful! Please proceed to login.');
+      return true;
+    }
+  </script>
+</body>
+</html>
